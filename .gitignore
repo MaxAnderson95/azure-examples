@@ -1,4 +1,5 @@
 **/providers/*
+**/.terraform.lock.hcl
 
 # Local .terraform directories
 **/.terraform/*
