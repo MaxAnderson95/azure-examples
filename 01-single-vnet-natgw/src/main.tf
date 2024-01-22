@@ -3,7 +3,7 @@ terraform {
     resource_group_name  = "terraform"
     storage_account_name = "maxandersontfstate"
     container_name       = "tfstate"
-    key                  = "prod.terraform.tfstate"
+    key                  = "01-single-vnet-natgw.terraform.tfstate"
   }
 
   required_providers {
@@ -19,7 +19,10 @@ provider "azurerm" {
 }
 
 locals {
-  global_tags = {
-    managed_by = "terraform"
-  }
+  numeral_prefix = "01"
+}
+
+resource "azurerm_resource_group" "rg" {
+  name     = "${local.numeral_prefix}-single-vnet-natgw"
+  location = var.region
 }
