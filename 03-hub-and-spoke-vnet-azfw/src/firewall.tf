@@ -45,55 +45,35 @@ resource "azurerm_firewall_policy_rule_collection_group" "policy-rcg1" {
     action   = "Allow"
 
     rule {
-      name                  = "network_rule_collection1_rule1"
-      protocols             = ["TCP", "UDP"]
-      source_addresses      = ["*"]
-      destination_addresses = ["172.64.198.3", "172.64.199.3"] # ifconfig.io
+      name                  = "Allow-HTTP-From-VM1-to-VM2"
+      protocols             = ["TCP"]
+      source_addresses      = [azurerm_network_interface.test-vm-1-nic.private_ip_address]
+      destination_addresses = [azurerm_network_interface.test-vm-2-nic.private_ip_address]
       destination_ports     = ["80", "443"]
     }
   }
 
-  network_rule_collection {
-    name     = "default-deny"
-    priority = 65000
-    action   = "Deny"
+  application_rule_collection {
+    name     = "application-rule-collection1"
+    priority = 500
+    action   = "Allow"
 
     rule {
-      name                  = "default-deny-all"
-      protocols             = ["TCP", "UDP", "ICMP"]
-      source_addresses      = ["*"]
-      destination_addresses = ["*"]
-      destination_ports     = ["*"]
+      name              = "allow-ubuntu-updates"
+      source_addresses  = ["*"]
+      destination_fqdns = ["azure.archive.ubuntu.com"]
+
+      protocols {
+        type = "Http"
+        port = 80
+      }
+
+      protocols {
+        type = "Https"
+        port = 443
+      }
     }
+
   }
 }
 
-resource "azurerm_firewall_application_rule_collection" "policy-arc1" {
-  name                = "${local.numeral_prefix}-azfw-arc1"
-  azure_firewall_name = azurerm_firewall.azfw.name
-  resource_group_name = azurerm_resource_group.rg.name
-  priority            = 100
-  action              = "Allow"
-
-  rule {
-    name = "ubuntu-updates"
-
-    source_addresses = [
-      "*",
-    ]
-
-    target_fqdns = [
-      "*.archive.ubuntu.com",
-    ]
-
-    protocol {
-      port = "80"
-      type = "Http"
-    }
-
-    protocol {
-      port = "443"
-      type = "Https"
-    }
-  }
-}
