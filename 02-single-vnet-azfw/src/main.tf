@@ -23,6 +23,6 @@ locals {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "${local.numeral_prefix}-single-vnet-natgw"
+  name     = "${local.numeral_prefix}-single-vnet-azfw"
   location = var.region
 }

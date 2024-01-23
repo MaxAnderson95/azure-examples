@@ -42,25 +42,25 @@ resource "azurerm_firewall_policy_rule_collection_group" "policy-rcg1" {
   network_rule_collection {
     name     = "network-rule-collection1"
     priority = 400
-    action   = "Deny"
+    action   = "Allow"
 
     rule {
       name                  = "network_rule_collection1_rule1"
       protocols             = ["TCP", "UDP"]
       source_addresses      = ["*"]
-      destination_addresses = ["172.64.198.3", "172.64.199.3"]
+      destination_addresses = ["172.64.198.3", "172.64.199.3"] # ifconfig.io
       destination_ports     = ["80", "443"]
     }
   }
 
   network_rule_collection {
-    name     = "default-allow"
-    priority = 500
-    action   = "Allow"
+    name     = "default-deny"
+    priority = 65000
+    action   = "Deny"
 
     rule {
-      name                  = "default-allow-rule"
-      protocols             = ["TCP", "UDP"]
+      name                  = "default-deny-all"
+      protocols             = ["TCP", "UDP", "ICMP"]
       source_addresses      = ["*"]
       destination_addresses = ["*"]
       destination_ports     = ["*"]
