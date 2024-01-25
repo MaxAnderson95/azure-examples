@@ -23,6 +23,6 @@ locals {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "${local.numeral_prefix}-vwan-single-secure-hub.terraform"
+  name     = "${local.numeral_prefix}-vwan-single-secure-hub"
   location = var.region
 }
