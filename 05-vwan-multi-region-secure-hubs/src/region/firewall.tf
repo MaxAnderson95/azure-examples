@@ -21,7 +21,7 @@ resource "azurerm_firewall" "azfw" {
 }
 
 resource "azurerm_firewall_policy" "azfw_policy" {
-  name                     = "policy-azfw-securehub-eus"
+  name                     = "policy-azfw-securehub-${var.region}"
   resource_group_name      = data.azurerm_resource_group.rg.name
   location                 = var.region
   sku                      = "Standard"

@@ -1,3 +1,14 @@
+### Cloud-init ###
+data "cloudinit_config" "cloudinit" {
+  gzip          = true
+  base64_encode = true
+
+  part {
+    content_type = "text/cloud-config"
+    content      = file("${path.module}/cloud-config.yaml")
+  }
+}
+
 ### VM 1 ###
 resource "azurerm_network_interface" "test-vm-1-nic" {
   name                = "${local.numeral_prefix}-test-vm-1-${var.region}-nic"
@@ -19,6 +30,7 @@ resource "azurerm_linux_virtual_machine" "test-vm-1" {
   admin_username                  = var.vm_admin_user
   admin_password                  = var.vm_admin_password
   disable_password_authentication = false
+  custom_data                     = data.cloudinit_config.cloudinit.rendered
   network_interface_ids = [
     azurerm_network_interface.test-vm-1-nic.id,
   ]
@@ -48,16 +60,6 @@ resource "azurerm_network_interface" "test-vm-2-nic" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.spoke2-workload1.id
     private_ip_address_allocation = "Dynamic"
-  }
-}
-
-data "cloudinit_config" "cloudinit" {
-  gzip          = true
-  base64_encode = true
-
-  part {
-    content_type = "text/cloud-config"
-    content      = file("${path.module}/cloud-config.yaml")
   }
 }
 
