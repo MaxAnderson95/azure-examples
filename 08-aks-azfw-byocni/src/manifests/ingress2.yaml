@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: podinfo-ingress2
+  annotations:
+    #ingress.cilium.io/loadbalancer-mode: "shared"
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  ingressClassName: cilium
+  rules:
+    - host: test2-20-25-8-29.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: podinfo-deployment
+                port:
+                  number: 80
+
