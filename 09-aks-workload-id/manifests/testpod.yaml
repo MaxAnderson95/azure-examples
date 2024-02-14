@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: testscript-config
+data:
+  testscript.py: |
+    from azure.identity import DefaultAzureCredential
+    from azure.storage.blob import BlobServiceClient
+    dc = DefaultAzureCredential()
+    client = BlobServiceClient("https://maxandersonexamplesa.blob.core.windows.net", credential=dc)
+    blob_client = client.get_blob_client("foo","bar.txt")
+    data = blob_client.download_blob()
+    print("Foobar")
+    print(data.content_as_text())
+  run.sh: |
+    #!/bin/bash
+    echo "Starting..."
+    pip install azure.identity > /dev/null 2>&1
+    pip install azure-storage-blob > /dev/null 2>&1
+    python /scripts/testscript.py
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+  namespace: default
+  labels:
+    azure.workload.identity/use: "true"
+spec:
+  serviceAccountName: workload-id-sa
+  containers:
+    - image: python
+      name: ubuntu
+      command: ["/bin/bash", "-c"]
+      args: ["/scripts/run.sh"]
+      volumeMounts:
+        - name: script-volume
+          mountPath: /scripts
+  volumes:
+    - name: script-volume
+      configMap:
+        name: testscript-config
+        defaultMode: 0777
