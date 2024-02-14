@@ -1,8 +1,6 @@
-# Azure Networking Examples
+# Azure Examples
 
-The repository contains examples of some Azure networking deployments, starting with a simple vnet, to (eventually) a multi-hub Azure Virtual WAN deployment.
-
-The examples are written in Terraform for ease of creation and tear-down. Each example has its own README and a diagram explaining what is deployed.
+This is a collection of examples I've build in Azure with Terraform.
 
 ## Examples
 
