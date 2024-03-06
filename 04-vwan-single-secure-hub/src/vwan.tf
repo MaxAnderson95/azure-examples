@@ -39,9 +39,9 @@ resource "azurerm_virtual_hub_routing_intent" "routing_intent" {
     next_hop     = azurerm_firewall.azfw.id
   }
 
-  routing_policy {
-    name         = "PrivateTrafficPolicy"
-    destinations = ["PrivateTraffic"]
-    next_hop     = azurerm_firewall.azfw.id
-  }
+  # routing_policy {
+  #   name         = "PrivateTrafficPolicy"
+  #   destinations = ["PrivateTraffic"]
+  #   next_hop     = azurerm_firewall.azfw.id
+  # }
 }

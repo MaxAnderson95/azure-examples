@@ -39,34 +39,33 @@ resource "azurerm_firewall_policy_rule_collection_group" "policy-rcg1" {
     action   = "Allow"
 
     rule {
-      name                  = "Allow-HTTP-From-VM1-to-VM2"
+      name                  = "Allow-All-HTTP"
       protocols             = ["TCP"]
-      source_addresses      = [azurerm_network_interface.test-vm-1-nic.private_ip_address]
-      destination_addresses = [azurerm_network_interface.test-vm-2-nic.private_ip_address]
+      source_addresses      = ["*"]
+      destination_addresses = ["*"]
       destination_ports     = ["80", "443"]
     }
   }
 
-  application_rule_collection {
-    name     = "application-rule-collection1"
-    priority = 500
-    action   = "Allow"
+  # application_rule_collection {
+  #   name     = "application-rule-collection1"
+  #   priority = 500
+  #   action   = "Allow"
 
-    rule {
-      name              = "allow-ubuntu-updates"
-      source_addresses  = ["*"]
-      destination_fqdns = ["azure.archive.ubuntu.com"]
+  #   rule {
+  #     name              = "allow-ubuntu-updates"
+  #     source_addresses  = ["*"]
+  #     destination_fqdns = ["azure.archive.ubuntu.com"]
 
-      protocols {
-        type = "Http"
-        port = 80
-      }
+  #     protocols {
+  #       type = "Http"
+  #       port = 80
+  #     }
 
-      protocols {
-        type = "Https"
-        port = 443
-      }
-    }
-
-  }
+  #     protocols {
+  #       type = "Https"
+  #       port = 443
+  #     }
+  #   }
+  # }
 }
